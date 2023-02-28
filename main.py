@@ -55,19 +55,24 @@ def save():
     if len(website) == 0 or len(password) == 0:
         messagebox.showinfo(title="Oops!", message=f"You've left empty fields!")
     else:
+        try:
         # is_ok = messagebox.askokcancel(title=f"{website}", message=f"Are the account information correct?: \nEmail:"
         #                                                           f" {email} \nPassword: {password}")
         # with open("data.txt", "a") as data_file:
         #     data_file.write(f"{website} || {email} || {password}\n")
         #     web_ent.delete(0, END)  # czysci pole gdzie wpisano strone, przygotowuje pole na nowe dane
         #     pass_ent.delete(0, END)
-        with open("data.json", "r") as data_file:
-            data = json.load(data_file)
+            with open("data.json", "r") as data_file:
+                data = json.load(data_file)
+        except FileNotFoundError:
+            with open("data.json", "w") as data_file:
+                json.dump(data, data_file, indent=4)
+        else:
             data.update(new_data)
 
-        with open("data.json", "w") as data_file:
-            json.dump(data, data_file, indent=4)
-
+            with open("data.json", "w") as data_file:
+                json.dump(data, data_file, indent=4)
+        finally:
             web_ent.delete(0, END)  # czysci pole gdzie wpisano strone, przygotowuje pole na nowe dane
             pass_ent.delete(0, END)
 
