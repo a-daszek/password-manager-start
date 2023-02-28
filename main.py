@@ -56,12 +56,12 @@ def save():
         messagebox.showinfo(title="Oops!", message=f"You've left empty fields!")
     else:
         try:
-        # is_ok = messagebox.askokcancel(title=f"{website}", message=f"Are the account information correct?: \nEmail:"
-        #                                                           f" {email} \nPassword: {password}")
-        # with open("data.txt", "a") as data_file:
-        #     data_file.write(f"{website} || {email} || {password}\n")
-        #     web_ent.delete(0, END)  # czysci pole gdzie wpisano strone, przygotowuje pole na nowe dane
-        #     pass_ent.delete(0, END)
+            # is_ok = messagebox.askokcancel(title=f"{website}", message=f"Are the account information correct?:
+            # \nEmail:" {email} \nPassword: {password}")
+            # with open("data.txt", "a") as data_file:
+            #     data_file.write(f"{website} || {email} || {password}\n")
+            #     web_ent.delete(0, END)  # czysci pole gdzie wpisano strone, przygotowuje pole na nowe dane
+            #     pass_ent.delete(0, END)
             with open("data.json", "r") as data_file:
                 data = json.load(data_file)
         except FileNotFoundError:
@@ -77,6 +77,18 @@ def save():
             pass_ent.delete(0, END)
 
 
+
+
+def find_password():
+    typed_web = web_ent.get()
+    with open("data.json") as data_file:
+        data = json.load(data_file)
+
+        if typed_web in data:
+            email = data[typed_web]["email"]
+            password = data[typed_web]["password"]
+            messagebox.showinfo(title="Oops!", message=f"You already have an account on this site.\nEmail: {email}"
+                                                       f" \nPassword: {password}")
 # ---------------------------- UI SETUP ------------------------------- #
 
 window = Tk()
@@ -91,8 +103,8 @@ canvas.grid(column=2, row=1)
 web_label = Label(text="Website:")
 web_label.grid(column=1, row=2)
 
-web_ent = Entry(width=35)
-web_ent.grid(column=2, row=2, columnspan=2)
+web_ent = Entry(width=17)
+web_ent.grid(column=2, row=2)
 web_ent.focus()
 
 em_us_label = Label(text="Email/Username:")
@@ -113,5 +125,8 @@ gen_pass_butt.grid(column=3, row=4)
 
 add_butt = Button(text="Add", width=30, command=save)
 add_butt.grid(column=2, row=5, columnspan=2)
+
+search_button = Button(text="Search", width=14, command=find_password)
+search_button.grid(column=3, row=2)
 
 window.mainloop()
