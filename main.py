@@ -1,6 +1,16 @@
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
+def save():
+
+    website = web_ent.get() # zapisuje dane w zmiennej 'website' to co zostalo wpisane w polu web_ent
+    email = em_us_ent.get()
+    password = pass_ent.get()
+
+    with open("data.txt", "a") as data_file:
+        data_file.write(f"{website} || {email} || {password}\n")
+        web_ent.delete(0, END) # czysci pole gdzie wpisano strone, przygotowuje pole na nowe dane
+        pass_ent.delete(0, END)
 
 # ---------------------------- UI SETUP ------------------------------- #
 
@@ -38,7 +48,7 @@ pass_ent.grid(column=2, row=4)
 gen_pass_butt = Button(text="Generate Password")
 gen_pass_butt.grid(column=3, row=4)
 
-add_butt = Button(text="Add", width=30)
+add_butt = Button(text="Add", width=30, command=save)
 add_butt.grid(column=2, row=5, columnspan=2)
 
 window.mainloop()
