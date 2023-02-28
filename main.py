@@ -1,35 +1,37 @@
 from tkinter import *
 from tkinter import messagebox
-
+from random import randint, choice, shuffle
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
-import random
-letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
 
-nr_letters = random.randint(8, 10)
-nr_symbols = random.randint(2, 4)
-nr_numbers = random.randint(2, 4)
+def generate_password():
+    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
 
-password_list = []
+    # for char in range(nr_letters):
+    #   password_list.append(random.choice(letters))
+    #
+    # for char in range(nr_symbols):
+    #   password_list += random.choice(symbols)
+    #
+    # for char in range(nr_numbers):
+    #   password_list += random.choice(numbers)
 
-for char in range(nr_letters):
-  password_list.append(random.choice(letters))
+    password_letters = [choice(letters) for _ in range(randint(8, 10))]
+    password_symbols = [choice(symbols) for _ in range(randint(2, 4))]
+    password_numbers = [choice(numbers) for _ in range(randint(2, 4))]
 
-for char in range(nr_symbols):
-  password_list += random.choice(symbols)
+    password_list = password_letters + password_numbers + password_symbols
+    shuffle(password_list)
 
-for char in range(nr_numbers):
-  password_list += random.choice(numbers)
+    # password = ""
+    # for char in password_list:
+    #   password += char
 
-random.shuffle(password_list)
+    password = "".join(password_list)
+    pass_ent.insert(0, password)
 
-password = ""
-for char in password_list:
-  password += char
-
-print(f"Your password is: {password}")
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def save():
     website = web_ent.get()  # zapisuje dane w zmiennej 'website' to co zostalo wpisane w polu web_ent
@@ -81,7 +83,7 @@ pass_label.grid(column=1, row=4)
 pass_ent = Entry(width=17)
 pass_ent.grid(column=2, row=4)
 
-gen_pass_butt = Button(text="Generate Password")
+gen_pass_butt = Button(text="Generate Password", command=generate_password)
 gen_pass_butt.grid(column=3, row=4)
 
 add_butt = Button(text="Add", width=30, command=save)
