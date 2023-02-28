@@ -1,24 +1,60 @@
-# ---------------------------- PASSWORD GENERATOR ------------------------------- #
+from tkinter import *
+from tkinter import messagebox
 
+
+# ---------------------------- PASSWORD GENERATOR ------------------------------- #
+import random
+letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
+
+nr_letters = random.randint(8, 10)
+nr_symbols = random.randint(2, 4)
+nr_numbers = random.randint(2, 4)
+
+password_list = []
+
+for char in range(nr_letters):
+  password_list.append(random.choice(letters))
+
+for char in range(nr_symbols):
+  password_list += random.choice(symbols)
+
+for char in range(nr_numbers):
+  password_list += random.choice(numbers)
+
+random.shuffle(password_list)
+
+password = ""
+for char in password_list:
+  password += char
+
+print(f"Your password is: {password}")
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def save():
-
-    website = web_ent.get() # zapisuje dane w zmiennej 'website' to co zostalo wpisane w polu web_ent
+    website = web_ent.get()  # zapisuje dane w zmiennej 'website' to co zostalo wpisane w polu web_ent
     email = em_us_ent.get()
     password = pass_ent.get()
 
-    with open("data.txt", "a") as data_file:
-        data_file.write(f"{website} || {email} || {password}\n")
-        web_ent.delete(0, END) # czysci pole gdzie wpisano strone, przygotowuje pole na nowe dane
-        pass_ent.delete(0, END)
+    if len(website) == 0 or len(password) == 0:
+        messagebox.showinfo(title="Oops!", message=f"You've left empty fields!")
+
+    else:
+        is_ok = messagebox.askokcancel(title=f"{website}", message=f"Are the account information correct?: \nEmail:"
+                                                                  f" {email} \nPassword: {password}")
+
+        if is_ok:
+            with open("data.txt", "a") as data_file:
+                data_file.write(f"{website} || {email} || {password}\n")
+                web_ent.delete(0, END)  # czysci pole gdzie wpisano strone, przygotowuje pole na nowe dane
+                pass_ent.delete(0, END)
+
 
 # ---------------------------- UI SETUP ------------------------------- #
 
-from tkinter import *
-
 window = Tk()
 window.title("Password Manager")
-window. config(padx=40, pady=40)
+window.config(padx=40, pady=40)
 
 canvas = Canvas(width=200, height=200, highlightthickness=0)
 logo_img = PhotoImage(file="logo.png")
