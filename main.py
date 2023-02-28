@@ -77,18 +77,25 @@ def save():
             pass_ent.delete(0, END)
 
 
-
+# ---------------------------- FIND PASSWORD ------------------------------- #
 
 def find_password():
     typed_web = web_ent.get()
-    with open("data.json") as data_file:
-        data = json.load(data_file)
-
+    try:
+        with open("data.json") as data_file:
+            data = json.load(data_file)
+    except FileNotFoundError:
+        messagebox.showinfo(title="Oops!", message="File does not exist.")
+    else:
         if typed_web in data:
             email = data[typed_web]["email"]
             password = data[typed_web]["password"]
             messagebox.showinfo(title="Oops!", message=f"You already have an account on this site.\nEmail: {email}"
                                                        f" \nPassword: {password}")
+        else:
+            messagebox.showinfo(title="Oops!", message=f"No details found for {typed_web} website.")
+
+
 # ---------------------------- UI SETUP ------------------------------- #
 
 window = Tk()
