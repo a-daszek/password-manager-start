@@ -2,10 +2,15 @@ from tkinter import *
 from tkinter import messagebox
 from random import randint, choice, shuffle
 import pyperclip
+import json
+
+
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 def generate_password():
-    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
+               'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+               'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
     numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
 
@@ -32,26 +37,39 @@ def generate_password():
     password = "".join(password_list)
     pass_ent.insert(0, password)
 
-    pyperclip.copy(password) # od razu kopiuje wygenerowane haslo
+    pyperclip.copy(password)  # od razu kopiuje wygenerowane haslo
+
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def save():
     website = web_ent.get()  # zapisuje dane w zmiennej 'website' to co zostalo wpisane w polu web_ent
     email = em_us_ent.get()
     password = pass_ent.get()
+    new_data = {
+        website: {
+            "email": email,
+            "password": password,
+        }
+    }
 
     if len(website) == 0 or len(password) == 0:
         messagebox.showinfo(title="Oops!", message=f"You've left empty fields!")
-
     else:
-        is_ok = messagebox.askokcancel(title=f"{website}", message=f"Are the account information correct?: \nEmail:"
-                                                                  f" {email} \nPassword: {password}")
+        # is_ok = messagebox.askokcancel(title=f"{website}", message=f"Are the account information correct?: \nEmail:"
+        #                                                           f" {email} \nPassword: {password}")
+        # with open("data.txt", "a") as data_file:
+        #     data_file.write(f"{website} || {email} || {password}\n")
+        #     web_ent.delete(0, END)  # czysci pole gdzie wpisano strone, przygotowuje pole na nowe dane
+        #     pass_ent.delete(0, END)
+        with open("data.json", "r") as data_file:
+            data = json.load(data_file)
+            data.update(new_data)
 
-        if is_ok:
-            with open("data.txt", "a") as data_file:
-                data_file.write(f"{website} || {email} || {password}\n")
-                web_ent.delete(0, END)  # czysci pole gdzie wpisano strone, przygotowuje pole na nowe dane
-                pass_ent.delete(0, END)
+        with open("data.json", "w") as data_file:
+            json.dump(data, data_file, indent=4)
+
+            web_ent.delete(0, END)  # czysci pole gdzie wpisano strone, przygotowuje pole na nowe dane
+            pass_ent.delete(0, END)
 
 
 # ---------------------------- UI SETUP ------------------------------- #
